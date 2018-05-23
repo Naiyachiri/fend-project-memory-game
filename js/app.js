@@ -2,6 +2,8 @@
  * Create a list that holds all of your cards
  */
 
+let cardList = document.querySelectorAll('.card');
+
 
 /*
  * Display the cards on the page
@@ -10,8 +12,29 @@
  *   - add each card's HTML to the page
  */
 
+/**
+ *  personal shuffle function adapted from below to work for objects on objects inside of targeted object 
+ * 
+*/
+let testObject = {
+    0: {0:'a'},
+    1: {0:'b'},
+    2: {0:'c'}
+}
+//converts an object to an array allowing html elements (which are objects) to be shuffled using the shuffle function
+function nodeListToArray(nodeList) {
+    let results = [];
+    for (let i = 0; i< nodeList.length; i ++) {
+        results[i] = nodeList[i];
+    }
+    return results;
+}
+
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
+    if (typeof array == 'object') {
+        array = nodeListToArray(array); // converts any objects passed in into an array;
+    }
     var currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
