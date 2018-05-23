@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-
+ 
 let deckList = document.querySelectorAll('.card'); // creates a list of all cards in deck
 let restartButton = document.querySelector('.restart'); // set up targetter for restart button
 let moveCount = 0; // initialize the move counter
@@ -14,11 +14,7 @@ let score = document.querySelector('.moves'); // target the score
  *   - add each card's HTML to the page
  */
 
-/**
- *  personal shuffle function adapted from provided function to work for objects on objects inside of targeted object 
- * // Shuffle function from http://stackoverflow.com/a/2450976
- * 
-*/
+
 
 //converts an object to an array allowing html elements (which are objects) to be shuffled using the shuffle function
 function nodeListToArray(nodeList) {
@@ -29,6 +25,9 @@ function nodeListToArray(nodeList) {
     return results;
 }
 
+/**
+ * //card related functions
+ */
 function resetCardClasses() { // removes all classes that reveal the cards
     deckList.forEach(function(currentValue, currentIndex, listObj) {
         currentValue.classList.remove('show'); 
@@ -37,6 +36,16 @@ function resetCardClasses() { // removes all classes that reveal the cards
     });
 }
 
+function toggleCardVisibility() {
+    initialOpenCard.classList.toggle('show');
+    initialOpenCard.classList.toggle('open');
+    secondOpenCard.classList.toggle('show');
+    secondOpenCard.classList.toggle('open');
+}
+
+/**
+ * // deck related functions
+ */
 function shuffle(array) {
     if (typeof array == 'object') {
         array = nodeListToArray(array); // converts any objects passed in into an array;
@@ -67,14 +76,16 @@ function shuffleDeck() {
         }
     )
 }
+/**
+ *  personal shuffle function adapted from provided function to work for objects on objects inside of targeted object 
+ * Shuffle function from http://stackoverflow.com/a/2450976
+ * 
+*/
 
-function toggleCardVisibility() {
-    initialOpenCard.classList.toggle('show');
-    initialOpenCard.classList.toggle('open');
-    secondOpenCard.classList.toggle('show');
-    secondOpenCard.classList.toggle('open');
-}
 
+/**
+ * // move/score related functions
+ */
 function resetScore() {
     moveCount = 0;
     updateScore();
@@ -84,7 +95,10 @@ function updateScore() {
     score.textContent = moveCount; // change our actual html element showing score to reflect actual score
 }
 
-
+function incrementScore() {
+    moveCount++;
+    updateScore();
+}
 
 
 
@@ -157,15 +171,13 @@ function handleCardClick(event) {
             initialOpenCard.classList.add('match');
             //set second revealed card as matched
             secondOpenCard.classList.add('match');
+            toggleCardVisibility(); // reset revealed cards
+        } else {
+            setTimeout(toggleCardVisibility, 500);
         }
          
-        toggleCardVisibility(); // reset revealed cards
+        
         openCards = []; // reset revealed card list
     }
 }
 
-
-function incrementScore() {
-    moveCount++;
-    updateScore();
-}
