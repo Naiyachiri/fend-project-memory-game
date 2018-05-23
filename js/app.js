@@ -3,6 +3,9 @@
  */
 
 let deckList = document.querySelectorAll('.card'); // creates a list of all cards in deck
+let restartButton = document.querySelector('.restart'); // set up targetter for restart button
+let moveCount = 0; // initialize the move counter
+let score = document.querySelector('.moves'); // target the score
 
 /*
  * Display the cards on the page
@@ -72,21 +75,32 @@ function toggleCardVisibility() {
     secondOpenCard.classList.toggle('open');
 }
 
-let restartButton = document.querySelector('.restart'); // set up targetter for restart button
+function resetScore() {
+    moveCount = 0;
+    updateScore();
+}
 
-restartButton.onclick = function() {handleResetClick();}; // set up event listener for our restart function
+function updateScore() {
+    score.textContent = moveCount; // change our actual html element showing score to reflect actual score
+}
+
+
+
+
 
 /**
  * 
  * event listeners
  * 
  */
+restartButton.onclick = function() {handleResetClick();}; // set up event listener for our restart function
 
-// * set up the event listener for a card.
+// * set up the event listener for each card.
 deckList.forEach(
     function(currentValue, currentIndex, listObj) {
         currentValue.addEventListener("click", handleCardClick);
 });
+
 
 /**
  * 
@@ -95,6 +109,7 @@ deckList.forEach(
  */
 
 function handleResetClick() { // handler function for reset clicks
+    resetScore(); // reset score
     resetCardClasses(); // reset revealing classes for all cards
     shuffleDeck(); // shuffles card positions
 }
@@ -109,18 +124,21 @@ function handleResetClick() { // handler function for reset clicks
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
 let openCards = []; // list to remember what cards have been revealed
 let initialOpenCard; // variable to target our initial card opened
 let secondOpenCard; // variable to target our second card opened
 
 function handleCardClick(event) {
     let selectedCard = event.target; // selector for card clicked
-
+    
     // condition to prevent anything from happening if a matched card or non-card element is clicked
     if (selectedCard.classList.contains('match') || !selectedCard.classList.contains('card')) {
         return; //do nothing
+    } else {
+        incrementScore(); // add to moves
     }
-
+    
     selectedCard.classList.add('open');
     selectedCard.classList.add('show');
     openCards.push(selectedCard.querySelector('.fa').classList.item(1));
@@ -147,3 +165,7 @@ function handleCardClick(event) {
 }
 
 
+function incrementScore() {
+    moveCount++;
+    updateScore();
+}
