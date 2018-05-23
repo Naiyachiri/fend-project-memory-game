@@ -2,7 +2,7 @@
  * Create a list that holds all of your cards
  */
 
-let cardList = document.querySelectorAll('.card');
+let deckList = document.querySelectorAll('.card'); // initializes our list of the cards in the deck
 
 
 /*
@@ -47,7 +47,20 @@ function shuffle(array) {
 
     return array;
 }
-
+function shuffleDeck() {
+    deckList = deckList = document.querySelectorAll('.card'); // updates the list of cards in the deck
+    let deck = document.querySelector('.deck');
+    let shuffledDeck = shuffle(deckList);;
+    deck.innerHTML = ''; // clear the deck, so we can append children
+    shuffledDeck.forEach(
+        function(currentValue, currentIndex, listObj){
+            //console.log(currentValue);
+            let currentNode = currentValue;
+            deck.append(currentNode); // + ', ' + currentIndex + ', ' + this
+        }
+    )
+    return shuffledDeck;
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
