@@ -2,8 +2,7 @@
  * Create a list that holds all of your cards
  */
 
-let deckList = document.querySelectorAll('.card'); // initializes our list of the cards in the deck
-
+let deckList = document.querySelectorAll('.card'); // creates a list of all cards in deck
 
 /*
  * Display the cards on the page
@@ -13,14 +12,11 @@ let deckList = document.querySelectorAll('.card'); // initializes our list of th
  */
 
 /**
- *  personal shuffle function adapted from below to work for objects on objects inside of targeted object 
+ *  personal shuffle function adapted from provided function to work for objects on objects inside of targeted object 
+ * // Shuffle function from http://stackoverflow.com/a/2450976
  * 
 */
-let testObject = {
-    0: {0:'a'},
-    1: {0:'b'},
-    2: {0:'c'}
-}
+
 //converts an object to an array allowing html elements (which are objects) to be shuffled using the shuffle function
 function nodeListToArray(nodeList) {
     let results = [];
@@ -30,7 +26,14 @@ function nodeListToArray(nodeList) {
     return results;
 }
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+function resetCardClasses() { // removes all classes that reveal the cards
+    deckList.forEach(function(currentValue, currentIndex, listObj) {
+        currentValue.classList.remove('show'); 
+        currentValue.classList.remove('match');
+        currentValue.classList.remove('open');
+    });
+}
+
 function shuffle(array) {
     if (typeof array == 'object') {
         array = nodeListToArray(array); // converts any objects passed in into an array;
@@ -47,23 +50,50 @@ function shuffle(array) {
 
     return array;
 }
+
+//shuffle deck function for shuffling and adding the cards back to our deck
 function shuffleDeck() {
-    deckList = deckList = document.querySelectorAll('.card'); // updates the list of cards in the deck
-    let deck = document.querySelector('.deck');
-    let shuffledDeck = shuffle(deckList);;
+    deckList = document.querySelectorAll('.card'); // targeter for all the li.card elements
+    let deck = document.querySelector('.deck'); // setup a targeter ul.deck elements
+    let shuffledDeck = shuffle(deckList);; // assign the shuffled decklist to a local variable
     deck.innerHTML = ''; // clear the deck, so we can append children
-    shuffledDeck.forEach(
+    shuffledDeck.forEach( // iterates through our generated shuffledDecklist in order to append each card to ul.deck
         function(currentValue, currentIndex, listObj){
-            //console.log(currentValue);
-            let currentNode = currentValue;
-            deck.append(currentNode); // + ', ' + currentIndex + ', ' + this
+            let currentNode = currentValue; // assigns currentNode to be the current node of our shuffled list
+            deck.appendChild(currentNode); // add our nodes to the deck node
         }
     )
-    return shuffledDeck;
+}
+
+let restartButton = document.querySelector('.restart'); // set up targetter for restart button
+
+restartButton.onclick = function() {handleResetClick();}; // set up event listener for our restart function
+
+/**
+ * 
+ * event listeners
+ * 
+ */
+
+// * set up the event listener for a card.
+deckList.forEach(
+    function(currentValue, currentIndex, listObj) {
+        currentValue.addEventListener("click", handleCardClick);
+});
+
+/**
+ * 
+ * event handlers
+ * 
+ */
+
+function handleResetClick() { // handler function for reset clicks
+    resetCardClasses(); // reset revealing classes for all cards
+    shuffleDeck(); // shuffles card positions
 }
 
 /*
- * set up the event listener for a card. If a card is clicked:
+ *- if the list already has another card, check to see if the two cards match
  *  - display the card's symbol (put this functionality in another function that you call from this one)
  *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
@@ -72,3 +102,16 @@ function shuffleDeck() {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+let openCards = []; // list to remember what cards have been revealed
+
+function handleCardClick(event) {
+    let selectedCard = event.target; // selector for card clicked
+    if (selectedCard.classList.contains('match')) {
+        return; //do nothing
+    }
+    selectedCard.classList.add('open');
+    selectedCard.classList.add('show');
+    openCards.push(selectedCard.querySelector('.fa').classList.item(1));
+}
+
+
