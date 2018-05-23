@@ -65,6 +65,13 @@ function shuffleDeck() {
     )
 }
 
+function toggleCardVisibility() {
+    initialOpenCard.classList.toggle('show');
+    initialOpenCard.classList.toggle('open');
+    secondOpenCard.classList.toggle('show');
+    secondOpenCard.classList.toggle('open');
+}
+
 let restartButton = document.querySelector('.restart'); // set up targetter for restart button
 
 restartButton.onclick = function() {handleResetClick();}; // set up event listener for our restart function
@@ -103,15 +110,40 @@ function handleResetClick() { // handler function for reset clicks
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 let openCards = []; // list to remember what cards have been revealed
+let initialOpenCard; // variable to target our initial card opened
+let secondOpenCard; // variable to target our second card opened
 
 function handleCardClick(event) {
     let selectedCard = event.target; // selector for card clicked
-    if (selectedCard.classList.contains('match')) {
+
+    // condition to prevent anything from happening if a matched card or non-card element is clicked
+    if (selectedCard.classList.contains('match') || !selectedCard.classList.contains('card')) {
         return; //do nothing
     }
+
     selectedCard.classList.add('open');
     selectedCard.classList.add('show');
     openCards.push(selectedCard.querySelector('.fa').classList.item(1));
+
+    if (openCards.length == 1) {  // save the first revealed card 
+        initialOpenCard = selectedCard;
+    }
+
+    if (openCards.length == 2) {  // save second revealed card
+        secondOpenCard = selectedCard;
+    } 
+
+    if (openCards.length == 2) { // compare images on the two revealed cards
+        if (openCards[0] == openCards[1]) { // if matched
+            //set initial revealed card as matched
+            initialOpenCard.classList.add('match');
+            //set second revealed card as matched
+            secondOpenCard.classList.add('match');
+        }
+         
+        toggleCardVisibility(); // reset revealed cards
+        openCards = []; // reset revealed card list
+    }
 }
 
 
