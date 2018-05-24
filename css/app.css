@@ -86,9 +86,9 @@ h1 {
  */
 
 .score-panel {
+    margin-bottom: 10px;
     text-align: left;
     width: 345px;
-    margin-bottom: 10px;
 }
 
 .score-panel .stars {
@@ -107,6 +107,50 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
 .gold {
     color: gold;
+}
+
+/*
+*
+* MODAL CSS
+*
+*/
+.modal {
+    background-color: rgba(0,0,0,0.4);
+    display: none; /*default hidden*/
+    height: 100%;
+    left: 0;
+    overflow: auto;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.modal-content {
+    color: rgba(0, 0, 0);
+    background-color: rgb(84, 193, 243);
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid rgb(3, 83, 23);
+    width: 80%;
+}
+.modal-message {
+    text-align: center;
+}
+
+.close-modal {
+    color: rgb(180, 180, 180);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-modal:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

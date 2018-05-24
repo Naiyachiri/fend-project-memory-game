@@ -2,20 +2,21 @@
  * Create a list that holds all of your cards
  */
 let deckList = document.querySelectorAll('.card'); // creates a list of all cards in deck
-
-let restartButton = document.querySelector('.restart'); // set up targetter for restart button
-
 let moveCount = 0; // initialize the move counter
 let score = document.querySelector('.moves'); // target the score
-let starBoard = document.querySelector('.stars'); // targets the unordered list containing our stars
-let allStars = document.querySelectorAll('.fa-star'); // list all stars DOM elements in our starboard 
-
 let openCards = []; // list to remember what cards have been revealed
 let initialOpenCard; // variable to target our initial card opened
 let secondOpenCard; // variable to target our second card opened
 let endGameStatus = 0; // game ends at 8
-
 let seconds = 0; // timer variable
+
+const modalMessage = document.querySelector('.modal-message'); // target the p tag to tell player victory details
+const starBoard = document.querySelector('.stars'); // targets the unordered list containing our stars
+const allStars = document.querySelectorAll('.fa-star'); // list all stars DOM elements in our starboard 
+const restartButton = document.querySelector('.restart'); // set up targetter for restart button
+const modal = document.querySelector('.modal'); // targets the modal
+const closeModal = document.querySelector('.close-modal'); // targets close button for modal
+
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -113,11 +114,16 @@ function startClock(){
  * // move/score related functions
  */
 
-function checkEndGame() {
-    if (endGameStatus == 16) {
-        //TODO: Notify player of game completion and congratulations
-        // tell them elapsed time, star rating, play again
-    }   
+
+function updateModalMessage() {
+    modalMessage.innerHTML = "Congratulations you have won! <br>  The time it took you was " + seconds + " seconds! <br>  It took you " + moveCount + " moves! <br> Hit the X to play again!"; 
+}
+
+function showModal () {
+    if (endGameStatus == 8) { // only show the modal when the game is over
+        updateModalMessage();
+    modal.style.display = "initial"; // changes display css to be visible
+    }
 }
 
 function evalStarRating() {
@@ -166,9 +172,10 @@ function incrementScore() {
  * 
  */
 restartButton.onclick = function() {handleResetClick();}; // set up event listener for our restart function
+closeModal.onclick = function() {handleCloseModal();} // set up event listener for closing the modal
 
-// * set up the event listener for each card.
-function startEventListeners() {
+
+function startEventListeners() { // * set up the event listener for each card
     deckList.forEach(
         function(currentValue, currentIndex, listObj) {
             currentValue.addEventListener("click", handleCardClick);
@@ -198,6 +205,11 @@ function handleResetClick() { // handler function for reset clicks
     startEventListeners();
     openCards = []; // resets open cards
     seconds = 0; // resets the clock
+}
+
+function handleCloseModal() {
+    modal.style.display =  "none"; // changes modal display back to default, hidden
+    handleResetClick(); // resets the game
 }
 
 /*
@@ -252,7 +264,7 @@ function handleCardClick(event) {
         }
         openCards = []; // reset revealed card list
         evalStarRating(); // evaluate player's rating
-        checkEndGame(); // evaluable if game is over
+        showModal(); // shows end game message
     }
 }
 
