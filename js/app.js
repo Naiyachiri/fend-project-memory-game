@@ -85,6 +85,13 @@ function shuffleDeck() {
 /**
  * // move/score related functions
  */
+
+function checkEndGame() {
+    if (endGameStatus == 16) {
+        //TODO: Notify player of game completion and congratulations
+    }   
+}
+
 function resetScore() {
     moveCount = 0;
     updateScore();
@@ -107,11 +114,21 @@ function incrementScore() {
 restartButton.onclick = function() {handleResetClick();}; // set up event listener for our restart function
 
 // * set up the event listener for each card.
-deckList.forEach(
-    function(currentValue, currentIndex, listObj) {
-        currentValue.addEventListener("click", handleCardClick);
-});
+function startEventListeners() {
+    deckList.forEach(
+        function(currentValue, currentIndex, listObj) {
+            currentValue.addEventListener("click", handleCardClick);
+    });    
+}
 
+//reset all event listeners
+function resetListeners() {
+    deckList.forEach(
+        function(currentValue, currentIndex, listObj) {
+            currentValue.removeEventListener("click", handleCardClick);
+        }
+    )
+}
 
 /**
  * 
@@ -122,7 +139,10 @@ deckList.forEach(
 function handleResetClick() { // handler function for reset clicks
     resetScore(); // reset score
     resetCardClasses(); // reset revealing classes for all cards
+    resetListeners(); // re-enable card click handlers
     shuffleDeck(); // shuffles card positions
+    startEventListeners();
+    openCards = []; // resets open cards
 }
 
 /*
@@ -139,8 +159,7 @@ function handleResetClick() { // handler function for reset clicks
 let openCards = []; // list to remember what cards have been revealed
 let initialOpenCard; // variable to target our initial card opened
 let secondOpenCard; // variable to target our second card opened
-let fadingStatus = 0; // 0 = inactive 1 = active
-
+let endGameStatus = 0; // game ends at 16
 
 function handleCardClick(event) {
     let selectedCard = event.target; // selector for card clicked
@@ -153,7 +172,6 @@ function handleCardClick(event) {
     selectedCard.classList.add('open');
     selectedCard.classList.add('show');
     openCards.push(selectedCard.querySelector('.fa').classList.item(1));
-
     if (openCards.length == 1) {  // save the first revealed card 
         initialOpenCard = selectedCard;
         initialOpenCard.removeEventListener("click", handleCardClick); // prevent repeated calls to function on same card
@@ -171,12 +189,15 @@ function handleCardClick(event) {
             //set second revealed card as matched
             secondOpenCard.classList.add('match');
             toggleCardVisibility(); // reset revealed cards
+            endGameStatus++;
         } else {
             initialOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
             secondOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
-            setTimeout(toggleCardVisibility, 500); // set a timer so the player can see both revealed cards before they are hidden
+            setTimeout(toggleCardVisibility, 200); // set a timer so the player can see both revealed cards before they are hidden; a low time of 200ms selected because higher times players are likely to click before the card is finished fading causing a card to remain revealed
         }
         openCards = []; // reset revealed card list
+        checkEndGame(); // evaluable if game is over
     }
 }
 
+handleResetClick(); // initiate the game by resetting the board
