@@ -9,6 +9,7 @@ let initialOpenCard; // variable to target our initial card opened
 let secondOpenCard; // variable to target our second card opened
 let endGameStatus = 0; // game ends at 8
 let seconds = 0; // timer variable
+let gameResetState = 0; // determines if timer starts on card click (0) or stops because game is reset (1)
 
 const modalMessage = document.querySelector('.modal-message'); // target the p tag to tell player victory details
 const starBoard = document.querySelector('.stars'); // targets the unordered list containing our stars
@@ -16,6 +17,7 @@ const allStars = document.querySelectorAll('.fa-star'); // list all stars DOM el
 const restartButton = document.querySelector('.restart'); // set up targetter for restart button
 const modal = document.querySelector('.modal'); // targets the modal
 const closeModal = document.querySelector('.close-modal'); // targets close button for modal
+const clockText = document.querySelector('.clock-text'); // target our clock's text
 
 /*
  * Display the cards on the page
@@ -92,23 +94,24 @@ function shuffleDeck() {
  * 
 */
 
-function startClock(){
+function startClock() {
     if (endGameStatus == 8) {
         console.log('You\'ve completed the memory game in ' + seconds + " seconds!" );
         return seconds; // time spent to complete game
     }
-
-    if (seconds >= 60) { //DEBUG & PREVENT INFINITY FUNCTION
-        console.log('60 seconds elapsed'); // alert
-        seconds = 0; // reset counter 
-        return; // end function
+    if (gameResetState == 1) { // if game is restarted do not continue counting
+        console.log("game reset! Timer awaiting first move!");
+        return;
     }
-    
+   
     seconds++; 
-    console.log(seconds);
+    updateClockText();
     setTimeout(startClock, 1000); //repeats the function every 1 second
 }
 
+function updateClockText() {
+    clockText.textContent = seconds + " seconds";
+}
 
 /**
  * // move/score related functions
@@ -119,7 +122,7 @@ function updateModalMessage() {
     modalMessage.innerHTML = "Congratulations you have won! <br>  The time it took you was " + seconds + " seconds! <br>  It took you " + moveCount + " moves! <br> Hit the X to play again!"; 
 }
 
-function showModal () {
+function showModal() {
     if (endGameStatus == 8) { // only show the modal when the game is over
         updateModalMessage();
     modal.style.display = "initial"; // changes display css to be visible
@@ -198,13 +201,16 @@ function resetListeners() {
  */
 
 function handleResetClick() { // handler function for reset clicks
+    gameResetState = 1; // stop the timer
     resetScore(); // reset score
     resetCardClasses(); // reset revealing classes for all cards
     resetListeners(); // re-enable card click handlers
-    shuffleDeck(); // shuffles card positions
+    shuffleDeck(); // shuffles card positions    
     startEventListeners();
     openCards = []; // resets open cards
     seconds = 0; // resets the clock
+    updateClockText();
+    endGameStatus = 0; // resets game status
 }
 
 function handleCloseModal() {
@@ -227,6 +233,7 @@ function handleCloseModal() {
 
 function handleCardClick(event) {
     let selectedCard = event.target; // selector for card clicked
+    gameResetState = 0; // enable timer to start
     if (seconds == 0) {
         startClock(); //starts clock on card click if not already started
     }
