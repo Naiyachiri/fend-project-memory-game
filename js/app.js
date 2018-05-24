@@ -2,12 +2,20 @@
  * Create a list that holds all of your cards
  */
 let deckList = document.querySelectorAll('.card'); // creates a list of all cards in deck
+
 let restartButton = document.querySelector('.restart'); // set up targetter for restart button
+
 let moveCount = 0; // initialize the move counter
 let score = document.querySelector('.moves'); // target the score
 let starBoard = document.querySelector('.stars'); // targets the unordered list containing our stars
 let allStars = document.querySelectorAll('.fa-star'); // list all stars DOM elements in our starboard 
 
+let openCards = []; // list to remember what cards have been revealed
+let initialOpenCard; // variable to target our initial card opened
+let secondOpenCard; // variable to target our second card opened
+let endGameStatus = 0; // game ends at 8
+
+let seconds = 0; // timer variable
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -82,6 +90,23 @@ function shuffleDeck() {
  * Shuffle function from http://stackoverflow.com/a/2450976
  * 
 */
+
+function startClock(){
+    if (endGameStatus == 8) {
+        console.log('You\'ve completed the memory game in ' + seconds + " seconds!" );
+        return seconds; // time spent to complete game
+    }
+
+    if (seconds >= 60) { //DEBUG & PREVENT INFINITY FUNCTION
+        console.log('60 seconds elapsed'); // alert
+        seconds = 0; // reset counter 
+        return; // end function
+    }
+    
+    seconds++; 
+    console.log(seconds);
+    setTimeout(startClock, 1000); //repeats the function every 1 second
+}
 
 
 /**
@@ -172,6 +197,7 @@ function handleResetClick() { // handler function for reset clicks
     shuffleDeck(); // shuffles card positions
     startEventListeners();
     openCards = []; // resets open cards
+    seconds = 0; // resets the clock
 }
 
 /*
@@ -185,18 +211,18 @@ function handleResetClick() { // handler function for reset clicks
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-let openCards = []; // list to remember what cards have been revealed
-let initialOpenCard; // variable to target our initial card opened
-let secondOpenCard; // variable to target our second card opened
-let endGameStatus = 0; // game ends at 16
+
 
 function handleCardClick(event) {
     let selectedCard = event.target; // selector for card clicked
-// condition to prevent anything from happening if a matched card or non-card element is clicked
+    if (seconds == 0) {
+        startClock(); //starts clock on card click if not already started
+    }
+    // condition to prevent anything from happening if a matched card or non-card element is clicked
     if (selectedCard.classList.contains('match') || !selectedCard.classList.contains('card')) {
         return; //do nothing
     } else {
-        incrementScore(); // add to moves
+        incrementScore(); // increments moves
     }
     selectedCard.classList.add('open');
     selectedCard.classList.add('show');
