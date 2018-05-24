@@ -96,11 +96,11 @@ function shuffleDeck() {
 
 function startClock() {
     if (endGameStatus == 8) {
-        console.log('You\'ve completed the memory game in ' + seconds + " seconds!" );
+        console.log('You\'ve completed the memory game in ' + seconds +  'seconds!' );
         return seconds; // time spent to complete game
     }
     if (gameResetState == 1) { // if game is restarted do not continue counting
-        console.log("game reset! Timer awaiting first move!");
+        console.log('game reset! Timer awaiting first move!');
         return;
     }
    
@@ -110,7 +110,7 @@ function startClock() {
 }
 
 function updateClockText() {
-    clockText.textContent = seconds + " seconds";
+    clockText.textContent = seconds + ' seconds';
 }
 
 /**
@@ -119,13 +119,13 @@ function updateClockText() {
 
 
 function updateModalMessage() {
-    modalMessage.innerHTML = "Congratulations you have won! <br>  The time it took you was " + seconds + " seconds! <br>  It took you " + moveCount + " moves! <br> Hit the X to play again!"; 
+    modalMessage.innerHTML = 'Congratulations you have won! <br>  The time it took you was ' + seconds + ' seconds! <br>  It took you ' + moveCount + ' moves! <br> Hit the X to play again!'; 
 }
 
 function showModal() {
     if (endGameStatus == 8) { // only show the modal when the game is over
         updateModalMessage();
-    modal.style.display = "initial"; // changes display css to be visible
+    modal.style.display = 'initial'; // changes display css to be visible
     }
 }
 
@@ -214,7 +214,7 @@ function handleResetClick() { // handler function for reset clicks
 }
 
 function handleCloseModal() {
-    modal.style.display =  "none"; // changes modal display back to default, hidden
+    modal.style.display =  'none'; // changes modal display back to default, hidden
     handleResetClick(); // resets the game
 }
 
