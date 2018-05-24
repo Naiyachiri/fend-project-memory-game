@@ -5,6 +5,8 @@ let deckList = document.querySelectorAll('.card'); // creates a list of all card
 let restartButton = document.querySelector('.restart'); // set up targetter for restart button
 let moveCount = 0; // initialize the move counter
 let score = document.querySelector('.moves'); // target the score
+let starBoard = document.querySelector('.stars'); // targets the unordered list containing our stars
+let allStars = document.querySelectorAll('.fa-star'); // list all stars DOM elements in our starboard 
 
 /*
  * Display the cards on the page
@@ -89,7 +91,34 @@ function shuffleDeck() {
 function checkEndGame() {
     if (endGameStatus == 16) {
         //TODO: Notify player of game completion and congratulations
+        // tell them elapsed time, star rating, play again
     }   
+}
+
+function evalStarRating() {
+    allStars.forEach( //reset colors to update to new score
+        function (currentValue) {
+            currentValue.classList.remove('gold');
+        }
+    )
+    if (moveCount <= 24) { // 3 stars if  24 and under moves
+        allStars.forEach(
+            function(currentValue, currentIndex, listObj) {
+                currentValue.classList.add('gold');
+            }
+        );
+    }
+    else if (moveCount >= 25 && moveCount <= 36) { // between 25 and 36 is 2 stars
+        for (let i = 0; i < 2; i++) {
+            allStars[i].classList.add('gold');
+        }
+    } 
+    else if (moveCount >= 37 && moveCount <= 72) {
+        allStars[0].classList.add('gold');
+    }
+    else {
+        return; // no stars past 72!
+    }
 }
 
 function resetScore() {
@@ -196,6 +225,7 @@ function handleCardClick(event) {
             setTimeout(toggleCardVisibility, 200); // set a timer so the player can see both revealed cards before they are hidden; a low time of 200ms selected because higher times players are likely to click before the card is finished fading causing a card to remain revealed
         }
         openCards = []; // reset revealed card list
+        evalStarRating(); // evaluate player's rating
         checkEndGame(); // evaluable if game is over
     }
 }
