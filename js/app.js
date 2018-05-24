@@ -1,7 +1,6 @@
 /*
  * Create a list that holds all of your cards
  */
- 
 let deckList = document.querySelectorAll('.card'); // creates a list of all cards in deck
 let restartButton = document.querySelector('.restart'); // set up targetter for restart button
 let moveCount = 0; // initialize the move counter
@@ -100,8 +99,6 @@ function incrementScore() {
     updateScore();
 }
 
-
-
 /**
  * 
  * event listeners
@@ -142,27 +139,29 @@ function handleResetClick() { // handler function for reset clicks
 let openCards = []; // list to remember what cards have been revealed
 let initialOpenCard; // variable to target our initial card opened
 let secondOpenCard; // variable to target our second card opened
+let fadingStatus = 0; // 0 = inactive 1 = active
+
 
 function handleCardClick(event) {
     let selectedCard = event.target; // selector for card clicked
-    
-    // condition to prevent anything from happening if a matched card or non-card element is clicked
+// condition to prevent anything from happening if a matched card or non-card element is clicked
     if (selectedCard.classList.contains('match') || !selectedCard.classList.contains('card')) {
         return; //do nothing
     } else {
         incrementScore(); // add to moves
     }
-    
     selectedCard.classList.add('open');
     selectedCard.classList.add('show');
     openCards.push(selectedCard.querySelector('.fa').classList.item(1));
 
     if (openCards.length == 1) {  // save the first revealed card 
         initialOpenCard = selectedCard;
+        initialOpenCard.removeEventListener("click", handleCardClick); // prevent repeated calls to function on same card
     }
 
     if (openCards.length == 2) {  // save second revealed card
         secondOpenCard = selectedCard;
+        secondOpenCard.removeEventListener("click", handleCardClick);
     } 
 
     if (openCards.length == 2) { // compare images on the two revealed cards
@@ -173,10 +172,10 @@ function handleCardClick(event) {
             secondOpenCard.classList.add('match');
             toggleCardVisibility(); // reset revealed cards
         } else {
-            setTimeout(toggleCardVisibility, 500);
+            initialOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
+            secondOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
+            setTimeout(toggleCardVisibility, 500); // set a timer so the player can see both revealed cards before they are hidden
         }
-         
-        
         openCards = []; // reset revealed card list
     }
 }
