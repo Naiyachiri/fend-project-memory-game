@@ -142,7 +142,7 @@ h1 {
 }
 
 .close-modal {
-    color: rgb(180, 180, 180);
+    color: rgb(0, 0, 0);
     float: right;
     font-size: 28px;
     font-weight: bold;
