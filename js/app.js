@@ -12,7 +12,6 @@ let seconds = 0; // timer variable
 let gameResetState = 0; // determines if timer starts on card click (0) or stops because game is reset (1)
 
 const modalMessage = document.querySelector('.modal-message'); // target the p tag to tell player victory details
-const starBoard = document.querySelector('.stars'); // targets the unordered list containing our stars
 const allStars = document.querySelectorAll('.fa-star'); // list all stars DOM elements in our starboard 
 const restartButton = document.querySelector('.restart'); // set up targetter for restart button
 const modal = document.querySelector('.modal'); // targets the modal
@@ -79,14 +78,14 @@ function shuffle(array) {
 function shuffleDeck() {
     deckList = document.querySelectorAll('.card'); // targeter for all the li.card elements
     let deck = document.querySelector('.deck'); // setup a targeter ul.deck elements
-    let shuffledDeck = shuffle(deckList);; // assign the shuffled decklist to a local variable
+    let shuffledDeck = shuffle(deckList); // assign the shuffled decklist to a local variable
     deck.innerHTML = ''; // clear the deck, so we can append children
     shuffledDeck.forEach( // iterates through our generated shuffledDecklist in order to append each card to ul.deck
         function(currentValue, currentIndex, listObj){
             let currentNode = currentValue; // assigns currentNode to be the current node of our shuffled list
             deck.appendChild(currentNode); // add our nodes to the deck node
         }
-    )
+    );
 }
 /**
  *  personal shuffle function adapted from provided function to work for objects on objects inside of targeted object 
@@ -134,7 +133,7 @@ function evalStarRating() {
         function (currentValue) {
             currentValue.classList.remove('gold');
         }
-    )
+    );
     if (moveCount <= 24) { // 3 stars if  24 and under moves
         allStars.forEach(
             function(currentValue, currentIndex, listObj) {
@@ -175,7 +174,7 @@ function incrementScore() {
  * 
  */
 restartButton.onclick = function() {handleResetClick();}; // set up event listener for our restart function
-closeModal.onclick = function() {handleCloseModal();} // set up event listener for closing the modal
+closeModal.onclick = function() {handleCloseModal();}; // set up event listener for closing the modal
 
 
 function startEventListeners() { // * set up the event listener for each card
@@ -191,7 +190,7 @@ function resetListeners() {
         function(currentValue, currentIndex, listObj) {
             currentValue.removeEventListener("click", handleCardClick);
         }
-    )
+    );
 }
 
 /**
@@ -234,7 +233,7 @@ function handleCloseModal() {
 function handleCardClick(event) {
     let selectedCard = event.target; // selector for card clicked
     gameResetState = 0; // enable timer to start
-    if (seconds == 0) {
+    if (seconds === 0) {
         startClock(); //starts clock on card click if not already started
     }
     // condition to prevent anything from happening if a matched card or non-card element is clicked

@@ -1,0 +1,37 @@
+@media screen and (max-width: 500px) {
+    .header-title {
+        font-size: 1.5em;
+    }
+    header {
+        order: 2;
+    }
+
+    .score-panel {
+        margin: 0;
+        order: 3;
+        width: 80%;
+    }
+
+    .star-panel {
+        display: inline-block;
+        width: 50%;
+    }
+
+    .clock-display {
+        display: inline-block;
+        width: 50%;
+    }
+
+    .deck {
+        box-shadow: none;
+        margin: 0;
+        min-height: 400px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .deck .card {
+        height: 80px;
+        width: 23%;
+    }
+}
