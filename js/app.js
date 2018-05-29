@@ -54,6 +54,12 @@ function toggleCardVisibility() {
     secondOpenCard.classList.toggle('open');
 }
 
+function toggleCardEventListeners() { // uses pointer-events to disable pointer events on all cards
+    deckList.forEach(function(currentValue, currentIndex, listObj) {
+        currentValue.classList.toggle('dpe');
+    });
+}
+
 /**
  * // deck related functions
  */
@@ -264,9 +270,11 @@ function handleCardClick(event) {
             toggleCardVisibility(); // reset revealed cards
             endGameStatus++;
         } else {
+            toggleCardEventListeners(); // disables all card listeners while cards are being revealed;
             initialOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
             secondOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
-            setTimeout(toggleCardVisibility, 200); // set a timer so the player can see both revealed cards before they are hidden; a low time of 200ms selected because higher times players are likely to click before the card is finished fading causing a card to remain revealed
+            setTimeout(toggleCardVisibility, 400); // set a timer so the player can see both revealed cards before they are hidden; a low time of 200ms selected because higher times players are likely to click before the card is finished fading causing a card to remain revealed
+            setTimeout(toggleCardEventListeners, 400); // set a timer to restore card listeners
         }
         openCards = []; // reset revealed card list
         evalStarRating(); // evaluate player's rating
