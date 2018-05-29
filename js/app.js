@@ -60,6 +60,11 @@ function toggleCardEventListeners() { // uses pointer-events to disable pointer 
     });
 }
 
+function toggleIncorrectAnimation() { // toggles animation classes for erroneous selection
+    initialOpenCard.classList.toggle('headShake');
+    secondOpenCard.classList.toggle('headShake');
+}
+
 /**
  * // deck related functions
  */
@@ -269,8 +274,10 @@ function handleCardClick(event) {
             secondOpenCard.classList.add('match');
             toggleCardVisibility(); // reset revealed cards
             endGameStatus++;
-        } else {
+        } else { // when two selected cards do not match do...
             toggleCardEventListeners(); // disables all card listeners while cards are being revealed;
+            toggleIncorrectAnimation(); // shows wrong selection animation
+            setTimeout(toggleIncorrectAnimation, 200); // removes the wrong animation class for future animations
             initialOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
             secondOpenCard.addEventListener("click", handleCardClick); // reenable clicking of the same card again
             setTimeout(toggleCardVisibility, 400); // set a timer so the player can see both revealed cards before they are hidden; a low time of 200ms selected because higher times players are likely to click before the card is finished fading causing a card to remain revealed
